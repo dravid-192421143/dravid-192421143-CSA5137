@@ -1,0 +1,32 @@
+# Caesar Cipher Program
+
+def caesar_encrypt(text, k):
+    result = ""
+    
+    for char in text:
+        if char.isalpha():  # Check if character is a letter
+            shift = k % 26
+            
+            if char.isupper():
+                result += chr((ord(char) - 65 + shift) % 26 + 65)
+            else:
+                result += chr((ord(char) - 97 + shift) % 26 + 97)
+        else:
+            result += char  # Keep spaces and symbols unchanged
+            
+    return result
+
+
+def caesar_decrypt(text, k):
+    return caesar_encrypt(text, -k)
+
+
+# Main Program
+text = input("Enter the message: ")
+k = int(input("Enter shift value (1-25): "))
+
+encrypted = caesar_encrypt(text, k)
+print("Encrypted Text:", encrypted)
+
+decrypted = caesar_decrypt(encrypted, k)
+print("Decrypted Text:", decrypted)
