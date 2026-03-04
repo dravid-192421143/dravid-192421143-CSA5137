@@ -1,0 +1,39 @@
+def generate_key(plaintext, key):
+    key = key.upper()
+    key_extended = ""
+    j = 0
+
+    for i in range(len(plaintext)):
+        if plaintext[i].isalpha():
+            key_extended += key[j % len(key)]
+            j += 1
+        else:
+            key_extended += plaintext[i]
+
+    return key_extended
+
+
+def encrypt(plaintext, key):
+    plaintext = plaintext.upper()
+    key_extended = generate_key(plaintext, key)
+    ciphertext = ""
+
+    for i in range(len(plaintext)):
+        if plaintext[i].isalpha():
+            p = ord(plaintext[i]) - ord('A')
+            k = ord(key_extended[i]) - ord('A')
+            c = (p + k) % 26
+            ciphertext += chr(c + ord('A'))
+        else:
+            ciphertext += plaintext[i]
+
+    return ciphertext
+
+
+# ---- Main Program ----
+plaintext = input("Enter plaintext: ")
+key = input("Enter key: ")
+
+ciphertext = encrypt(plaintext, key)
+
+print("\nCiphertext:", ciphertext)
