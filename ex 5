@@ -1,0 +1,31 @@
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+
+def affine_encrypt(plaintext, a, b):
+    if gcd(a, 26) != 1:
+        return "Invalid value of 'a'. It must be coprime with 26."
+
+    ciphertext = ""
+    plaintext = plaintext.upper()
+
+    for char in plaintext:
+        if char.isalpha():
+            p = ord(char) - ord('A')
+            c = (a * p + b) % 26
+            ciphertext += chr(c + ord('A'))
+        else:
+            ciphertext += char
+
+    return ciphertext
+
+
+# ---- Main Program ----
+text = input("Enter plaintext: ")
+a = int(input("Enter value of a: "))
+b = int(input("Enter value of b: "))
+
+result = affine_encrypt(text, a, b)
+print("\nCiphertext:", result)
