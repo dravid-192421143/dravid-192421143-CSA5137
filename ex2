@@ -1,0 +1,56 @@
+import string
+
+# Function to validate key
+def is_valid_key(key):
+    return (
+        len(key) == 26 and
+        key.isalpha() and
+        len(set(key.lower())) == 26
+    )
+
+# Encryption function
+def encrypt(plaintext, key):
+    alphabet = string.ascii_lowercase
+    key = key.lower()
+    result = ""
+
+    for char in plaintext:
+        if char.islower():
+            result += key[alphabet.index(char)]
+        elif char.isupper():
+            result += key[alphabet.index(char.lower())].upper()
+        else:
+            result += char  # Keep spaces and symbols unchanged
+
+    return result
+
+# Decryption function
+def decrypt(ciphertext, key):
+    alphabet = string.ascii_lowercase
+    key = key.lower()
+    result = ""
+
+    for char in ciphertext:
+        if char.islower():
+            result += alphabet[key.index(char)]
+        elif char.isupper():
+            result += alphabet[key.index(char.lower())].upper()
+        else:
+            result += char
+
+    return result
+
+
+# Main Program
+key = input("Enter 26-letter substitution key (unique letters only): ")
+
+if not is_valid_key(key):
+    print("Invalid key! Key must contain exactly 26 unique alphabet letters.")
+else:
+    plaintext = input("Enter plaintext: ")
+    
+    encrypted_text = encrypt(plaintext, key)
+    print("Encrypted Text:", encrypted_text)
+    
+    decrypted_text = decrypt(encrypted_text, key)
+    print("Decrypted Text:", decrypted_text)
