@@ -1,0 +1,80 @@
+import string
+
+# generate playfair matrix
+def generate_matrix(key):
+    key = key.upper().replace("J", "I")
+    seen = set()
+    matrix = []
+
+    for ch in key:
+        if ch.isalpha() and ch not in seen:
+            matrix.append(ch)
+            seen.add(ch)
+
+    for ch in string.ascii_uppercase:
+        if ch == 'J':
+            continue
+        if ch not in seen:
+            matrix.append(ch)
+            seen.add(ch)
+
+    matrix = [matrix[i:i+5] for i in range(0,25,5)]
+    return matrix
+
+
+# find position of character
+def find_position(matrix, ch):
+    if ch == 'J':
+        ch = 'I'
+    for i in range(5):
+        for j in range(5):
+            if matrix[i][j] == ch:
+                return i, j
+
+
+# decrypt pair
+def decrypt_pair(matrix, a, b):
+    r1,c1 = find_position(matrix,a)
+    r2,c2 = find_position(matrix,b)
+
+    if r1 == r2:
+        return matrix[r1][(c1-1)%5] + matrix[r2][(c2-1)%5]
+
+    elif c1 == c2:
+        return matrix[(r1-1)%5][c1] + matrix[(r2-1)%5][c2]
+
+    else:
+        return matrix[r1][c2] + matrix[r2][c1]
+
+
+# decrypt full text
+def decrypt_playfair(ciphertext, key):
+    matrix = generate_matrix(key)
+
+    cipher = ciphertext.replace(" ", "").upper()
+    plaintext = ""
+
+    for i in range(0, len(cipher), 2):
+        plaintext += decrypt_pair(matrix, cipher[i], cipher[i+1])
+
+    return plaintext, matrix
+
+
+# given ciphertext
+ciphertext = """
+KXJEY UREBE ZWEHE WRYTU HEYFS
+KREHE GOYFI WTTTU OLKSY CAJPO
+BOTEI ZONTX BYBNT GONEY CUZWR
+GDSON SXBOU YWRHE BAAHY USEDQ
+"""
+
+key = "PLAYFAIR EXAMPLE"
+
+plaintext, matrix = decrypt_playfair(ciphertext, key)
+
+print("Playfair Matrix:")
+for row in matrix:
+    print(" ".join(row))
+
+print("\nDecrypted Message:")
+print(plaintext)
