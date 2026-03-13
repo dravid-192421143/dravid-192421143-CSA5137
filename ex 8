@@ -1,0 +1,66 @@
+import string
+
+# function to generate cipher alphabet using keyword
+def generate_cipher_alphabet(keyword):
+    keyword = keyword.upper()
+    seen = set()
+    cipher = ""
+
+    # add keyword letters
+    for ch in keyword:
+        if ch not in seen:
+            cipher += ch
+            seen.add(ch)
+
+    # add remaining letters
+    for ch in string.ascii_uppercase:
+        if ch not in seen:
+            cipher += ch
+
+    return cipher
+
+
+# encryption
+def encrypt(plaintext, cipher_alpha):
+    plain_alpha = string.ascii_uppercase
+    result = ""
+
+    for ch in plaintext.upper():
+        if ch in plain_alpha:
+            index = plain_alpha.index(ch)
+            result += cipher_alpha[index]
+        else:
+            result += ch
+
+    return result
+
+
+# decryption
+def decrypt(ciphertext, cipher_alpha):
+    plain_alpha = string.ascii_uppercase
+    result = ""
+
+    for ch in ciphertext.upper():
+        if ch in cipher_alpha:
+            index = cipher_alpha.index(ch)
+            result += plain_alpha[index]
+        else:
+            result += ch
+
+    return result
+
+
+# main program
+keyword = "CIPHER"
+cipher_alphabet = generate_cipher_alphabet(keyword)
+
+print("Plain Alphabet :", string.ascii_uppercase)
+print("Cipher Alphabet:", cipher_alphabet)
+
+text = input("Enter plaintext: ")
+
+encrypted = encrypt(text, cipher_alphabet)
+print("Encrypted Text:", encrypted)
+
+decrypted = decrypt(encrypted, cipher_alphabet)
+print("Decrypted Text:", decrypted)
