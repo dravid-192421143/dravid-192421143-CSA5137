@@ -1,0 +1,50 @@
+def mod_inverse(a, m):
+    for i in range(m):
+        if (a * i) % m == 1:
+            return i
+    return None
+
+
+def break_affine_cipher():
+    # Given frequency mapping
+    P1 = ord('E') - ord('A')  # 4
+    P2 = ord('T') - ord('A')  # 19
+    C1 = ord('B') - ord('A')  # 1
+    C2 = ord('U') - ord('A')  # 20
+
+    # Solve 15a ≡ 19 (mod 26)
+    diffP = (P2 - P1) % 26
+    diffC = (C2 - C1) % 26
+
+    inv = mod_inverse(diffP, 26)
+    a = (diffC * inv) % 26
+    b = (C1 - a * P1) % 26
+
+    return a, b
+
+
+def affine_decrypt(ciphertext, a, b):
+    plaintext = ""
+    a_inv = mod_inverse(a, 26)
+
+    for char in ciphertext.upper():
+        if char.isalpha():
+            c = ord(char) - ord('A')
+            p = (a_inv * (c - b)) % 26
+            plaintext += chr(p + ord('A'))
+        else:
+            plaintext += char
+
+    return plaintext
+
+
+# ---- Main ----
+a, b = break_affine_cipher()
+print("Recovered key values:")
+print("a =", a)
+print("b =", b)
+
+ciphertext = input("\nEnter ciphertext to decrypt: ")
+plaintext = affine_decrypt(ciphertext, a, b)
+
+print("\nDecrypted Plaintext:", plaintext)
